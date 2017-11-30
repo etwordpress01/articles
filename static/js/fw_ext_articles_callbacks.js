@@ -3,6 +3,8 @@ jQuery(document).on('ready', function () {
     var loader_html = '<div class="provider-site-wrap"><div class="provider-loader"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>';
     var delete_article_title = fw_ext_articles_scripts_vars.delete_article_title;
     var delete_article_msg = fw_ext_articles_scripts_vars.delete_article_msg;
+	var listingo_featured_nounce	= fw_ext_articles_scripts_vars.listingo_featured_nounce;
+	var file_upload_title	= fw_ext_articles_scripts_vars.file_upload_title;
 	
     /***********************************************
      * Add/Edit new Article
@@ -79,51 +81,75 @@ jQuery(document).on('ready', function () {
             }
         });
     });
+	
+	//Uploader Handler
+	var uploader = new plupload.Uploader({
+		runtimes : 'html5,flash,silverlight,html4',
+		browse_button: 'upload-featured-image',          // this can be an id of a DOM element or the DOM element itself
+		file_data_name: 'listingo_uploader',
+		container: 'plupload-featured-container',
+		multi_selection : false,
+		flash_swf_url : fw_ext_articles_scripts_vars.theme_path_uri+'/images/plupload/Moxie.swf',
+		silverlight_xap_url : fw_ext_articles_scripts_vars.theme_path_uri+'/images/plupload/Moxie.xap',
+		multipart_params : {
+			"type" : "featured_image",
+		},
+		url: fw_ext_articles_scripts_vars.ajaxurl + "?action=listingo_featured_image_uploader&nonce=" + listingo_featured_nounce,
+		filters: {
+			mime_types : [
+				{ title : file_upload_title, extensions : "jpg,jpeg,gif,png" }
+			],
+			prevent_duplicates: true
+		}
 
-    var featured_frame;
+	});
 
-    jQuery(document).on('click', '#upload-featured-image', function (event) {
+	 uploader.init();
 
-        var $el = jQuery(this);
-        event.preventDefault();
-        if (featured_frame) {
-            featured_frame.open();
-            return;
-        }
+	 // Process Duraing Upload
+	 uploader.bind('FilesAdded', function(up, files) {
+		var html = '';
+		var featuredThumb = "";
+		plupload.each(files, function(file) {
+			//Do something duraing upload
+		});
+		up.refresh();
+		uploader.start();
+	});
 
-        // Create the media frame.
-        featured_frame = wp.media.frames.avatar = wp.media({
-            title: $el.data('choose'),
-            button: {
-                text: $el.data('update'),
-            },
-            states: [
-                new wp.media.controller.Library({
-                    title: $el.data('choose'),
-                    filterable: 'image',
-                    multiple: true,
-                })
-            ]
-        });
+	/* File percentage */
+	uploader.bind('UploadProgress', function(up, file) {
+		jQuery('.tg-galleryimg-item').addClass('tg-uploading');
+		jQuery('.tg-galleryimg-item figure').append('<span class="tg-loader"><i class="fa fa-spinner"></i></span><span class="tg-uploadingbar"><span class="tg-uploadingbar-percentage" style="width:' + file.percent + ';"></span></span>');
+	});
 
-        featured_frame.on('select', function () {
-            var selection = featured_frame.state().get('selection');
-            selection.map(function (attachment) {
-                attachment = attachment.toJSON();
-                if (attachment.id) {
-                    var data = {'id': attachment.id, 'thumbnail': attachment.url};
+	/* In case of error */
+	uploader.bind('Error', function( up, err ) {
+		//jQuery('#errors-log').html(err.message);
+		jQuery.sticky(err.message, {classList: 'important', speed: 200, autoclose: 5000});
+	});
 
-                    var load_featured = wp.template('load-featured-thumb');
-                    var _thumb = load_featured(data);
-                    jQuery(".tg-gallery").html(_thumb);
-                }
-            });
-
-        });
-        // Finally, open the modal.
-        featured_frame.open();
+	//On Complete Uplaod
+	uploader.bind('FileUploaded', function ( up, file, ajax_response ) {
+		var response = $.parseJSON( ajax_response.response );
+		jQuery('.tg-gallery .tg-galleryimg-item').find('.tg-loader').remove();
+		jQuery('.tg-gallery .tg-galleryimg-item').find('.tg-uploadingbar').remove();
+		if ( response.success ) {
+			jQuery('.tg-gallery .tg-galleryimg-item').find('.attachment_src').attr('src', response.url.thumbnail);
+			jQuery('.tg-gallery .tg-galleryimg-item').find('.attachment_id').val(response.attachment_id);
+		} else {
+			jQuery.sticky(response.message, {classList: 'important', speed: 200, autoclose: 5000});
+		}
+	});
+	
+	//Remove thumbnail
+	jQuery(document).on('click', '.del-featured-image', function (event) {
+		var _this	= jQuery(this);
+        _this.parents('figure').find('.attachment_id').val('');
+		_this.parents('figure').find('.attachment_src').attr('src', _this.data('placeholder'));
     });
-
+	
+    
     /************************************************
      * Sort Articles
      **********************************************/

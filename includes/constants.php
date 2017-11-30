@@ -11,6 +11,10 @@ if (!function_exists('fw_ext_article_sp_prepare_constants')) {
             'ajaxurl' => admin_url('admin-ajax.php'),
             'delete_article_title' => esc_html__('Article Delete Notification.', 'listingo'),
             'delete_article_msg' => esc_html__('Are you sure, you want to delete this article.', 'listingo'),
+			'listingo_featured_nounce' => wp_create_nonce ( 'listingo_featured_nounce' ),
+			'file_upload_title' => esc_html__('Feature image upload','listingo'),
+			'theme_path_uri' => get_template_directory_uri(),
+			'theme_path' => get_template_directory(),
         ));
     }
 

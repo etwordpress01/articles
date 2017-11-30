@@ -16,6 +16,8 @@ $settings = array('media_buttons' => true);
 $remaining_articles = listingo_get_subscription_meta('subscription_articles', $user_identity);
 $remaining_articles = $remaining_articles + 1; //total in package and one free
 
+$placeholder	= fw_get_template_customizations_directory_uri().'/extensions/articles/static/img/thumbnails/placeholder.jpg';
+
 $args = array('posts_per_page' => '-1',
     'post_type' => 'sp_articles',
     'orderby' => 'ID',
@@ -87,7 +89,17 @@ $posted_articles = $query->post_count;
                                             </a> 
                                             <div id="plupload-featured-container"></div>
                                         </label>
-                                        <div class="tg-gallery"></div>
+                                        <div class="tg-gallery">
+                                        	<div class="tg-galleryimg tg-galleryimg-item">
+												<figure>
+													<img src="<?php echo esc_url( $placeholder );?>" class="attachment_src" />
+													<input type="hidden" class="attachment_id" name="attachment_id" value="">
+													<figcaption>
+														<i class="fa fa-close del-featured-image" data-placeholder="<?php echo esc_url( $placeholder );?>"></i>
+													</figcaption>
+												</figure>
+											</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -113,14 +125,6 @@ $posted_articles = $query->post_count;
         <?php } ?>
     </div>
 </div>
-<script type="text/template" id="tmpl-load-featured-thumb">
-    <div class="tg-galleryimg tg-galleryimg-item">
-    <figure>
-    <img src="{{data.thumbnail}}">
-    <input type="hidden" name="attachment_id" value="{{data.id}}">
-    </figure>
-    </div>
-</script>
 <script type="text/template" id="tmpl-load-article-tags">
     <li>
     <span class="tg-tagdashboard">

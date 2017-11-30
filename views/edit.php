@@ -11,7 +11,6 @@
 global $current_user,
  $wp_roles,
  $userdata;
-wp_enqueue_media();
 $user_identity = $current_user->ID;
 $url_identity = $user_identity;
 if (!empty($_GET['identity'])) {
@@ -19,6 +18,7 @@ if (!empty($_GET['identity'])) {
 }
 
 $content = esc_html__('Article detail will be here', 'listingo');
+$placeholder	= fw_get_template_customizations_directory_uri().'/extensions/articles/static/img/thumbnails/placeholder.jpg';
 $settings = array('media_buttons' => true);
 $edit_id = !empty($_GET['id']) ? intval($_GET['id']) : '';
 $post_author = get_post_field('post_author', $edit_id);
@@ -39,6 +39,16 @@ $post_author = get_post_field('post_author', $edit_id);
 
             while ($query->have_posts()) : $query->the_post();
                 global $post;
+				$width  = '150';
+				$height = '150';
+			
+				$thumbnail	= listingo_prepare_thumbnail($post->ID ,$width,$height);
+				if (has_post_thumbnail()) { 
+					$thumbnail	= $thumbnail;
+				} else{
+					$thumbnail	= $placeholder;
+				}
+			
                 ?>
                 <div class="tg-dashboardtitle">
                     <h2><?php esc_html_e('Edit Article', 'listingo'); ?></h2>
@@ -114,14 +124,15 @@ $post_author = get_post_field('post_author', $edit_id);
                                                     <div id="plupload-featured-container"></div>
                                                 </label>
                                                 <div class="tg-gallery">
-                                                    <?php if (has_post_thumbnail()) { ?>
-                                                        <div class="tg-galleryimg tg-galleryimg-item">
-                                                            <figure>
-                                                                <?php the_post_thumbnail(); ?>
-                                                                <input type="hidden" name="attachment_id" value="<?php echo get_post_thumbnail_id(); ?>">
-                                                            </figure>
-                                                        </div>
-                                                    <?php } ?>
+													<div class="tg-galleryimg tg-galleryimg-item">
+														<figure>
+															<img src="<?php echo esc_url( $thumbnail );?>" class="attachment_src" />
+															<input type="hidden" class="attachment_id" name="attachment_id" value="<?php echo get_post_thumbnail_id(); ?>">
+															<figcaption>
+																<i class="fa fa-close del-featured-image" data-placeholder="<?php echo esc_url( $placeholder );?>"></i>
+															</figcaption>
+														</figure>
+													</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -151,14 +162,6 @@ $post_author = get_post_field('post_author', $edit_id);
         <?php } ?>
     </div>
 </div>
-<script type="text/template" id="tmpl-load-featured-thumb">
-    <div class="tg-galleryimg tg-galleryimg-item">
-    <figure>
-    <img src="{{data.thumbnail}}">
-    <input type="hidden" name="attachment_id" value="{{data.id}}">
-    </figure>
-    </div>
-</script>
 <script type="text/template" id="tmpl-load-article-tags">
     <li>
     <span class="tg-tagdashboard">

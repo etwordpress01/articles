@@ -141,7 +141,14 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
                 wp_set_post_terms($post_id, $article_tags, 'article_tags');
                 update_post_meta($post_id, 'provider_category', $provider_category);
 				
+				//delete prevoius attachment ID
+				$pre_attachment_id = get_post_thumbnail_id( $post_id );
+				if( !empty( $pre_attachment_id ) ){
+					wp_delete_attachment( $pre_attachment_id, true );
+				}
+				
 				if (!empty($attachment_id)) {
+					delete_post_thumbnail($post_id);
                     set_post_thumbnail($post_id, $attachment_id);
                 }
 
@@ -201,4 +208,73 @@ if (!function_exists('fw_ext_listingo_delete_articles')) {
 
     add_action('wp_ajax_fw_ext_listingo_delete_articles', 'fw_ext_listingo_delete_articles');
     add_action('wp_ajax_nopriv_fw_ext_listingo_delete_articles', 'fw_ext_listingo_delete_articles');
+}
+
+
+/**
+ * @upload featured image
+ * @return {}
+ */
+if ( ! function_exists( 'listingo_featured_image_uploader' ) ) {
+	function listingo_featured_image_uploader() {
+		global $current_user, $wp_roles,$userdata,$post;
+		$user_identity	= $current_user->ID;
+
+		if( function_exists('listingo_is_demo_site') ) { 
+			listingo_is_demo_site();
+		}; //if demo site then prevent
+		
+		$nonce = $_REQUEST[ 'nonce' ];
+		$type  = $_REQUEST[ 'type' ];
+		
+		if ( ! wp_verify_nonce( $nonce, 'listingo_featured_nounce' ) ) {
+			$ajax_response = array(
+				'success' => false,
+				'reason' => 'Security check failed!',
+			);
+			echo json_encode( $ajax_response );
+			die;
+		}
+		
+		$submitted_file = $_FILES[ 'listingo_uploader' ];
+		$uploaded_image = wp_handle_upload( $submitted_file, array( 'test_form' => false ) ); 
+
+		if ( isset( $uploaded_image[ 'file' ] ) ) {
+			$file_name = basename( $submitted_file[ 'name' ] );
+			$file_type = wp_check_filetype( $uploaded_image[ 'file' ] );
+
+			// Prepare an array of post data for the attachment.
+			$attachment_details = array(
+				'guid' => $uploaded_image[ 'url' ],
+				'post_mime_type' => $file_type[ 'type' ],
+				'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $file_name ) ),
+				'post_content' => '',
+				'post_status' => 'inherit'
+			);
+
+			$attach_id 	 = wp_insert_attachment( $attachment_details, $uploaded_image[ 'file' ] ); 
+			$attach_data = wp_generate_attachment_metadata( $attach_id, $uploaded_image[ 'file' ] ); 
+			wp_update_attachment_metadata( $attach_id, $attach_data );                                    
+			
+			//Image Size
+			$image_size	= 'thumbnail';
+			$thumbnail_url = listingo_get_profile_image_url( $attach_data,$image_size ); //get image url
+
+			$ajax_response = array(
+				'success' => true,
+				'url' => $thumbnail_url,
+				'attachment_id' => $attach_id
+			);
+
+			echo json_encode( $ajax_response );
+			die;
+
+		} else {
+			$ajax_response = array( 'success' => false, 'reason' => 'Image upload failed!' );
+			echo json_encode( $ajax_response );
+			die;
+		}
+	}
+	add_action('wp_ajax_listingo_featured_image_uploader', 'listingo_featured_image_uploader');
+	add_action('wp_ajax_nopriv_listingo_featured_image_uploader', 'listingo_featured_image_uploader');
 }
