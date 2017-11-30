@@ -8,7 +8,6 @@
  * @link      http://themographics.com/
  */
 global $current_user;
-wp_enqueue_media();
 $user_identity = $current_user->ID;
 $content = esc_html__('Add your article content here.', 'listingo');
 $settings = array('media_buttons' => true);
