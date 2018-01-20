@@ -155,7 +155,7 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
 				
 				//delete prevoius attachment ID
 				$pre_attachment_id = get_post_thumbnail_id( $post_id );
-				if( !empty( $pre_attachment_id ) && $pre_attachment_id != $attachment_id  ){
+				if( !empty( $pre_attachment_id ) && intval( $pre_attachment_id ) != intval( $attachment_id )  ){
 					wp_delete_attachment( $pre_attachment_id, true );
 				}
 				
