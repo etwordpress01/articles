@@ -119,6 +119,8 @@ jQuery(document).on('ready', function () {
 
 	/* File percentage */
 	uploader.bind('UploadProgress', function(up, file) {
+		if ( jQuery("#thumb-" + file.id).children().length > 0 ) { return false;}
+		
 		jQuery('.tg-galleryimg-item').addClass('tg-uploading');
 		jQuery('.tg-galleryimg-item figure').append('<span class="tg-loader"><i class="fa fa-spinner"></i></span><span class="tg-uploadingbar"><span class="tg-uploadingbar-percentage" style="width:' + file.percent + ';"></span></span>');
 	});

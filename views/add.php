@@ -12,8 +12,15 @@ $user_identity = $current_user->ID;
 $content = esc_html__('Add your article content here.', 'listingo');
 $settings = array('media_buttons' => true);
 
+$article_limit = 0;
+if (function_exists('fw_get_db_settings_option')) {
+	$article_limit = fw_get_db_settings_option('article_limit');
+}
+
+$article_limit = !empty( $article_limit ) ? $article_limit  : 0;
+
 $remaining_articles = listingo_get_subscription_meta('subscription_articles', $user_identity);
-$remaining_articles = $remaining_articles + 1; //total in package and one free
+$remaining_articles = $remaining_articles + $article_limit; //total in package and one free
 
 $placeholder	= fw_get_template_customizations_directory_uri().'/extensions/articles/static/img/thumbnails/placeholder.jpg';
 

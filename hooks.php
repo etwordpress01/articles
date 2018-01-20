@@ -105,7 +105,19 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
 
         //add/edit job
         if (isset($type) && $type === 'add') {
-            $article_post = array(
+            if(function_exists('fw_get_db_settings_option')) {
+				$approve_articles	= fw_get_db_settings_option('approve_articles', $default_value = null);
+			}
+			
+			if( isset( $approve_articles ) && $approve_articles === 'need_approval' ){
+				$status	= 'pending';
+				$json['message'] = esc_html__('Your article has submitted and will be publish after the review.', 'listingo');
+			} else{
+				$status	= 'publish';
+				$json['message'] = esc_html__('Article added successfully.', 'listingo');
+			}
+			
+			$article_post = array(
                 'post_title' 	=> $title,
                 'post_status' 	=> 'publish',
                 'post_content'  => $article_detail,
@@ -151,6 +163,8 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
 					delete_post_thumbnail($post_id);
                     set_post_thumbnail($post_id, $attachment_id);
                 }
+				
+				$json['message'] = esc_html__('Article updated successfully.', 'listingo');
 
 			} else {
                 $json['type'] = 'error';
@@ -167,7 +181,7 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
 		
 		
         $json['type'] = 'success';
-        $json['message'] = esc_html__('Article updated successfully.', 'listingo');
+        
         echo json_encode($json);
         die;
     }
