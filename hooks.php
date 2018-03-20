@@ -102,13 +102,14 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
         }
 
         $profile_page = isset($dir_profile_page[0]) ? $dir_profile_page[0] : '';
-
+		
+		if(function_exists('fw_get_db_settings_option')) {
+			$approve_articles	= fw_get_db_settings_option('approve_articles', $default_value = null);
+		}
+		
         //add/edit job
         if (isset($type) && $type === 'add') {
-            if(function_exists('fw_get_db_settings_option')) {
-				$approve_articles	= fw_get_db_settings_option('approve_articles', $default_value = null);
-			}
-			
+
 			if( isset( $approve_articles ) && $approve_articles === 'need_approval' ){
 				$status	= 'pending';
 				$json['message'] = esc_html__('Your article has submitted and will be publish after the review.', 'listingo');
@@ -138,18 +139,32 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
 			
 			update_post_meta($post_id, 'provider_category', $provider_category);
 			
+			if( isset( $approve_articles ) && $approve_articles === 'need_approval' ){
+				if( class_exists( 'ListingoProcessEmail' ) ) {
+					$email_helper	= new ListingoProcessEmail();
+					$emailData	    = array();
+					$emailData['article_name']	  	= $title;
+					$emailData['link']				= get_edit_post_link( $post_id );
+
+					$email_helper->approve_article( $emailData );
+				}
+			}
+			
 		} elseif (isset($type) && $type === 'update' && !empty($current)) {
             $post_author = get_post_field('post_author', $current);
-
+			$post_id = $current;
+			$status	= get_post_status( $post_id );
+			
             if (intval($current_user->ID) === intval($post_author)) {
                 $article_post = array(
                     'ID' => $current,
-                    'post_title' => $title,
-                    'post_content' => $article_detail,
+                    'post_title'    => $title,
+                    'post_content'  => $article_detail,
+					'post_status'	=> $status,
                 );
 				
                 wp_update_post($article_post);
-                $post_id = $current;
+                
                 wp_set_post_terms($post_id, $article_tags, 'article_tags');
                 update_post_meta($post_id, 'provider_category', $provider_category);
 				
