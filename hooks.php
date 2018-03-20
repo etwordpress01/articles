@@ -107,7 +107,7 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
 			$approve_articles	= fw_get_db_settings_option('approve_articles', $default_value = null);
 		}
 		
-        //add/edit job
+        //add/edit article
         if (isset($type) && $type === 'add') {
 
 			if( isset( $approve_articles ) && $approve_articles === 'need_approval' ){
