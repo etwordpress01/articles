@@ -157,14 +157,12 @@ $status	= get_post_status( $edit_id );
 					<?php
 				endwhile;
 				wp_reset_postdata();
-			} else {
-				?>
+			} else {?>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<?php Listingo_Prepare_Notification::listingo_warning(esc_html__('Restricted Access', 'listingo'), esc_html__('This article needs to be approve/publish to update.', 'listingo')); ?>
 				</div>
-			<?php } ?>
-        } else {
-            ?>
+			<?php }
+        } else {?>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <?php Listingo_Prepare_Notification::listingo_warning(esc_html__('Restricted Access', 'listingo'), esc_html__('You have not any privilege to view this page.', 'listingo')); ?>
             </div>

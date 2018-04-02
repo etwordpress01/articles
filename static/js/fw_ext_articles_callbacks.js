@@ -99,7 +99,7 @@ jQuery(document).on('ready', function () {
 			mime_types : [
 				{ title : file_upload_title, extensions : "jpg,jpeg,gif,png" }
 			],
-			prevent_duplicates: true
+			prevent_duplicates: false
 		}
 
 	});
