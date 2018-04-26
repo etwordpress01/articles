@@ -28,9 +28,9 @@ jQuery(document).on('ready', function () {
             success: function (response) {
                 jQuery('body').find('.provider-site-wrap').remove();
                 if (response.type == 'error') {
-                    jQuery.sticky(response.message, {classList: 'important', speed: 200, autoclose: 5000});
+                    jQuery.sticky(response.message, {classList: 'important',position:'center-center', speed: 200, autoclose: 5000});
                 } else {                 
-                    jQuery.sticky(response.message, {classList: 'success', speed: 200, autoclose: 5000, position: 'top-right', });
+                    jQuery.sticky(response.message, {classList: 'success', speed: 200, autoclose: 5000 });
 					if (response.return_url) {                      
 						window.location.replace(response.return_url);                  
 					}
@@ -63,10 +63,10 @@ jQuery(document).on('ready', function () {
                             success: function (response) {
                                 jQuery('body').find('.provider-site-wrap').remove();
                                 if (response.type == 'success') {
-                                    jQuery.sticky(response.message, {classList: 'success', speed: 200, autoclose: 5000, position: 'top-right', });
+                                    jQuery.sticky(response.message, {classList: 'success', speed: 200, autoclose: 5000 });
                                     _this.parents('tr').remove();
                                 } else {
-                                    jQuery.sticky(response.message, {classList: 'important', speed: 200, autoclose: 5000});
+                                    jQuery.sticky(response.message, {classList: 'important',position:'center-center', speed: 200, autoclose: 5000});
                                 }
                             }
                         });
@@ -128,7 +128,7 @@ jQuery(document).on('ready', function () {
 	/* In case of error */
 	uploader.bind('Error', function( up, err ) {
 		//jQuery('#errors-log').html(err.message);
-		jQuery.sticky(err.message, {classList: 'important', speed: 200, autoclose: 5000});
+		jQuery.sticky(err.message, {classList: 'important',position:'center-center', speed: 200, autoclose: 5000});
 	});
 
 	//On Complete Uplaod
@@ -140,7 +140,7 @@ jQuery(document).on('ready', function () {
 			jQuery('.tg-gallery .tg-galleryimg-item').find('.attachment_src').attr('src', response.url.thumbnail);
 			jQuery('.tg-gallery .tg-galleryimg-item').find('.attachment_id').val(response.attachment_id);
 		} else {
-			jQuery.sticky(response.message, {classList: 'important', speed: 200, autoclose: 5000});
+			jQuery.sticky(response.message, {classList: 'important',position:'center-center', speed: 200, autoclose: 5000});
 		}
 	});
 	
