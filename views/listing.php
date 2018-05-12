@@ -26,7 +26,7 @@ if (function_exists('fw_get_db_settings_option')) {
 
 $get_username = listingo_get_username($url_identity);
 $profile_page = isset($dir_profile_page[0]) ? $dir_profile_page[0] : '';
-$show_posts = get_option('posts_per_page') ? get_option('posts_per_page') : '2';
+$show_posts = get_option('posts_per_page') ? get_option('posts_per_page') : 10;
 
 $pg_page = get_query_var('page') ? get_query_var('page') : 1; //rewrite the global var
 $pg_paged = get_query_var('paged') ? get_query_var('paged') : 1; //rewrite the global var
@@ -69,7 +69,7 @@ $query = new WP_Query($args);
     <div class="tg-joblisting tg-dashboardmanagejobs">
         <div class="tg-dashboardhead">
             <div class="tg-dashboardtitle">
-                <h2><?php esc_html_e('Manage Articles', 'listingo'); ?></h2>
+                <h2><?php esc_html_e('Manage Articles', 'listingo'); ?><?php do_action('listingo_get_tooltip','section','articles');?></h2>
             </div>
             <div class="tg-btnaddservices">
                 <a href="<?php Listingo_Profile_Menu::listingo_profile_menu_link($profile_page, 'articles', $url_identity, '', 'add'); ?>"><?php esc_html_e('Add New Article', 'listingo'); ?></a>

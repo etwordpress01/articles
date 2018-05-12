@@ -10,7 +10,7 @@
 global $current_user;
 $user_identity = $current_user->ID;
 $content = esc_html__('Add your article content here.', 'listingo');
-$settings = array('media_buttons' => true);
+$settings = array('media_buttons' => false);
 
 $article_limit = 0;
 if (function_exists('fw_get_db_settings_option')) {
@@ -40,7 +40,7 @@ $posted_articles = $query->post_count;
         <div class="tg-dashboardtitle">
             <h2><?php esc_html_e('Post an article', 'listingo'); ?></h2>
         </div>
-         <?php if (isset($remaining_articles) && $remaining_articles > $posted_articles) { ?>
+        <?php if (isset($remaining_articles) && $remaining_articles > $posted_articles) { ?>
         <div class="tg-servicesmodal tg-categoryModal">
             <div class="tg-modalcontent">
                 <form class="tg-themeform tg-formamanagejobs tg-addarticle sp-dashboard-profile-form">

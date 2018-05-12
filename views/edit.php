@@ -19,7 +19,7 @@ if (!empty($_GET['identity'])) {
 
 $content = esc_html__('Article detail will be here', 'listingo');
 $placeholder = fw_get_template_customizations_directory_uri() . '/extensions/articles/static/img/thumbnails/placeholder.jpg';
-$settings = array('media_buttons' => true);
+$settings = array('media_buttons' => false);
 $edit_id = !empty($_GET['id']) ? intval($_GET['id']) : '';
 $post_author = get_post_field('post_author', $edit_id);
 $status = get_post_status($edit_id);
