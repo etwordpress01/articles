@@ -11,6 +11,8 @@ class FW_Extension_Articles extends FW_Extension {
      */
     public function _init() {
         $this->register_post_type();
+		add_filter('manage_sp_articles_posts_columns', array(&$this, 'directory_columns_add'),10,1);
+		add_action('manage_sp_articles_posts_custom_column', array(&$this, 'directory_columns'),10, 1);
     }
 
     /**
@@ -50,7 +52,9 @@ class FW_Extension_Articles extends FW_Extension {
      * @Register Post Type
      */
     private function register_post_type() {
-
+		$article_slug	= listingo_get_theme_settings('article_slug');
+		$article_slug	=  !empty( $article_slug ) ? $article_slug : 'article';
+		
         register_post_type('sp_articles', array(
             'labels' => array(
                 'name' => esc_html__('Articles', 'listingo'),
@@ -78,7 +82,7 @@ class FW_Extension_Articles extends FW_Extension {
             'exclude_from_search' => true,
             'hierarchical' => true,
             'menu_position' => 10,
-            'rewrite' => array('slug' => 'article', 'with_front' => true),
+            'rewrite' => array('slug' => $article_slug, 'with_front' => true),
             'query_var' => true,
             'has_archive' => 'false'
         ));
@@ -107,5 +111,29 @@ class FW_Extension_Articles extends FW_Extension {
             'rewrite' => array('slug' => 'article_tags'),
         ));
     }
+	
+	/**
+	 * @Prepare Columns
+	 * @return {post}
+	 */
+	public function directory_columns_add($columns) {
+		$columns['author'] 			= esc_html__('Author','listingo');
+		return $columns;
+	}
+
+	/**
+	 * @Get Columns
+	 * @return {}
+	 */
+	public function directory_columns($name) {
+		global $post;
+
+
+		switch ($name) {
+			case 'author':
+				echo ( get_the_author );
+			break;
+		}
+	}
 
 }

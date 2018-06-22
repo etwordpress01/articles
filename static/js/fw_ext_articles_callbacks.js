@@ -122,7 +122,8 @@ jQuery(document).on('ready', function () {
 		if ( jQuery("#thumb-" + file.id).children().length > 0 ) { return false;}
 		
 		jQuery('.tg-galleryimg-item').addClass('tg-uploading');
-		jQuery('.tg-galleryimg-item figure').append('<span class="tg-loader"><i class="fa fa-spinner"></i></span><span class="tg-uploadingbar"><span class="tg-uploadingbar-percentage" style="width:' + file.percent + ';"></span></span>');
+		jQuery('.tg-galleryimg-item figure').append('<span class="tg-loader"><i class="fa fa-spinner"></i></span><span class="tg-uploadingbar"><span class="tg-uploadingbar-percentage" style="width:' + file.percent + 'px;"></span></span>');
+		listingo_uploader_progressbar(file.percent,'add');
 	});
 
 	/* In case of error */
@@ -142,6 +143,8 @@ jQuery(document).on('ready', function () {
 		} else {
 			jQuery.sticky(response.message, {classList: 'important',position:'center-center', speed: 200, autoclose: 5000});
 		}
+		
+		listingo_uploader_progressbar('','remove');
 	});
 	
 	//Remove thumbnail
