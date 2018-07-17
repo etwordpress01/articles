@@ -52,7 +52,10 @@ class FW_Extension_Articles extends FW_Extension {
      * @Register Post Type
      */
     private function register_post_type() {
-		$article_slug	= listingo_get_theme_settings('article_slug');
+		if( function_exists('listingo_get_theme_settings') ){
+			$article_slug	= listingo_get_theme_settings('article_slug');
+		}
+		
 		$article_slug	=  !empty( $article_slug ) ? $article_slug : 'article';
 		
         register_post_type('sp_articles', array(
@@ -84,9 +87,9 @@ class FW_Extension_Articles extends FW_Extension {
             'menu_position' => 10,
             'rewrite' => array('slug' => $article_slug, 'with_front' => true),
             'query_var' => true,
-            'has_archive' => 'false'
+            'has_archive' => true
         ));
-        register_taxonomy('article_tags', 'sp_articles', array(
+        	register_taxonomy('article_tags', 'sp_articles', array(
             'hierarchical' => false,
             'labels' => array(
                 'name' => esc_html__('Tags', 'listingo'),
