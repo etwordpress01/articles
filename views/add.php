@@ -20,9 +20,10 @@ if (function_exists('fw_get_db_settings_option')) {
 $article_limit = !empty( $article_limit ) ? $article_limit  : 0;
 
 $remaining_articles = listingo_get_subscription_meta('subscription_articles', $user_identity);
-$remaining_articles = $remaining_articles + $article_limit; //total in package and one free
+$remaining_articles = !empty( $remaining_articles ) ? $remaining_articles  : 0;
 
-$placeholder	= fw_get_template_customizations_directory_uri().'/extensions/articles/static/img/thumbnails/placeholder.jpg';
+$remaining_articles = $remaining_articles + $article_limit; //total in package and one free
+$placeholder		= fw_get_template_customizations_directory_uri().'/extensions/articles/static/img/thumbnails/placeholder.jpg';
 
 $args = array('posts_per_page' => '-1',
     'post_type' => 'sp_articles',

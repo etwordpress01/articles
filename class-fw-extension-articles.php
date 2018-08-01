@@ -77,7 +77,7 @@ class FW_Extension_Articles extends FW_Extension {
             ),
             'description' => esc_html__('This is where you can add new Articles.', 'listingo'),
             'public' => true,
-            'supports' => array('title', 'editor', 'thumbnail'),
+            'supports' => array('title', 'editor', 'thumbnail',"author"),
             'show_ui' => true,
             'capability_type' => 'post',
             'map_meta_cap' => true,

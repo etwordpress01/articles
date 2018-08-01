@@ -107,3 +107,47 @@ if (current_user_can('professional') || current_user_can('business')) {
 		}
 	}
 }
+
+/**
+ * Removes the original author meta box and replaces it
+ * with a customized version.
+ */
+if (!function_exists('listingo_replace_post_author_meta_box')) {
+	add_action( 'add_meta_boxes', 'listingo_replace_post_author_meta_box' );
+	function listingo_replace_post_author_meta_box() {
+		$post_type = get_post_type();
+		$post_type_object = get_post_type_object( $post_type );
+		if( $post_type == 'sp_articles' ){
+			if ( post_type_supports( $post_type, 'author' ) ) {
+				if ( is_super_admin() || current_user_can( $post_type_object->cap->edit_others_posts ) ) {
+					remove_meta_box( 'authordiv', $post_type, 'core' );
+					add_meta_box( 'authordiv', esc_html__( 'Author', 'listingo' ), 'listingo_post_author_meta_box', null, 'normal' );
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Display form field with list of authors.
+ * Modified version of post_author_meta_box().
+ *
+ * @global int $user_ID
+ *
+ * @param object $post
+ */
+if (!function_exists('listingo_post_author_meta_box')) {
+	function listingo_post_author_meta_box( $post ) {
+		global $user_ID;
+		?>
+		<label class="screen-reader-text" for="post_author_override"><?php esc_html_e( 'Author', 'listingo' ); ?></label>
+		<?php
+		wp_dropdown_users( array(
+			'role__in' => [ 'professional', 'business' ], // Add desired roles here.
+			'name' => 'post_author_override',
+			'selected' => empty( $post->ID ) ? $user_ID : $post->post_author,
+			'include_selected' => true,
+			'show' => 'display_name_with_login',
+		) );
+	}
+}
