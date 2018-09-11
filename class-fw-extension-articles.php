@@ -46,6 +46,14 @@ class FW_Extension_Articles extends FW_Extension {
     public function render_display_dashboard_articles() {
         return $this->render_view('articles');
     }
+	
+	/**
+     * @Render Articles Edit View
+     * @return type
+     */
+    public function render_list_articles() {
+        return $this->render_view('grid');
+    }
 
     /**
      * @access Private

@@ -44,6 +44,20 @@ if (!function_exists('_filter_fw_ext_get_render_article_dashboard_view')) {
     add_action('render_sp_display_articles', '_filter_fw_ext_get_render_article_dashboard_view', 10);
 }
 
+
+/**
+ * @hook render articles dashboard view
+ * @type echo
+ */
+if (!function_exists('_filter_fw_ext_article_view')) {
+
+    function _filter_fw_ext_article_view() {
+        echo filter_fw_ext_article_view_v2();
+    }
+
+    add_action('render_sp_display_articles_v2', '_filter_fw_ext_article_view', 10);
+}
+
 /**
  * @hook render articles edit view
  * @type echo
@@ -178,7 +192,9 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
                 if (!empty($attachment_id)) {
                     delete_post_thumbnail($post_id);
                     set_post_thumbnail($post_id, $attachment_id);
-                }
+                } else if(!empty( $pre_attachment_id )){
+					wp_delete_attachment( $pre_attachment_id, true );
+				}
 
                 $json['message'] = esc_html__('Article updated successfully.', 'listingo');
             } else {
@@ -288,7 +304,7 @@ if (!function_exists('listingo_featured_image_uploader')) {
 
             //Image Size
             $image_size = 'thumbnail';
-            $thumbnail_url = listingo_get_profile_image_url($attach_data, $image_size); //get image url
+            $thumbnail_url = listingo_get_profile_image_url($attach_data, $image_size,$file_name); //get image url
 
             $ajax_response = array(
                 'success' => true,
