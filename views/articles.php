@@ -33,8 +33,7 @@ $username = listingo_get_username($post_author_id);
 $query = new WP_Query($args);
 
 
-if ($query->have_posts()) :
-    ?>
+if ($query->have_posts()) :?>
     <div class="tg-widget tg-widgetrelatedposts sp-provider-articles">
         <div class="tg-widgettitle">
             <h3><?php esc_html_e('Articles', 'listingo'); ?>&nbsp;<span class="written-by-sp"><?php esc_html_e('Written by', 'listingo'); ?>&nbsp;<?php echo esc_attr( $username );?></span></h3>

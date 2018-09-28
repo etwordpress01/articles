@@ -23,7 +23,7 @@ if( is_single() ){
 $args = array(
     'post_type' => 'sp_articles',
     'post_status' => 'publish',
-    'posts_per_page' => 3,
+    'posts_per_page' => -1,
     'author' => $post_author_id,
     'order' => 'DESC',
 	'post__not_in' => array(intval($exclude_post))
