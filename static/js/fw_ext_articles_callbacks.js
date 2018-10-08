@@ -108,7 +108,6 @@ jQuery(document).on('ready', function () {
 
 	 // Process Duraing Upload
 	 uploader.bind('FilesAdded', function(up, files) {
-		var html = '';
 		var featuredThumb = "";
 		plupload.each(files, function(file) {
 			//Do something duraing upload
@@ -126,7 +125,7 @@ jQuery(document).on('ready', function () {
 		listingo_uploader_progressbar(file.percent,'add');
 	});
 
-	/* In case of error */
+	//Error
 	uploader.bind('Error', function( up, err ) {
 		//jQuery('#errors-log').html(err.message);
 		jQuery.sticky(err.message, {classList: 'important',position:'center-center', speed: 200, autoclose: 5000});

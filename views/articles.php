@@ -29,7 +29,10 @@ $args = array(
 	'post__not_in' => array(intval($exclude_post))
 );
 
-$username = listingo_get_username($post_author_id);
+$username	= '';
+if( function_exists('listingo_get_username') ){
+	$username = listingo_get_username($post_author_id);
+}
 $query = new WP_Query($args);
 
 
