@@ -136,7 +136,7 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
 
             $article_post = array(
                 'post_title' => $title,
-                'post_status' => 'publish',
+                'post_status' => $status,
                 'post_content' => $article_detail,
                 'post_author' => $current_user->ID,
                 'post_type' => 'sp_articles',
