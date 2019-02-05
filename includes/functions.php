@@ -15,11 +15,11 @@ if (current_user_can('professional') || current_user_can('business')) {
 
 		function fw_ext_articles_sp_allow_uploads() {
 
-			/**
-			 * Redirect User if current user is not
-			 * Admin.
-			 */
-			if (is_admin() && !current_user_can('administrator') && !( defined('DOING_AJAX') && DOING_AJAX )) {
+			//redirect if admin side and roles are in[professional,customer,business]
+			if (is_admin() 
+				&& ( current_user_can('professional') || current_user_can('customer') || current_user_can('business')  ) 
+				&& !( defined('DOING_AJAX') && DOING_AJAX )
+			) {
 				wp_redirect(home_url('/'));
 			}
 
@@ -58,53 +58,54 @@ if (current_user_can('professional') || current_user_can('business')) {
 			$business->add_cap('edit_others_pages');
 		}
 	}
-	
-	/**
-	 * Upload Featured Image Using URL and ID.
-	 * @return query
-	 */
-	if (!function_exists('fw_ext_articles_show_current_user_attachments')) {
-		add_filter('ajax_query_attachments_args', 'fw_ext_articles_show_current_user_attachments', 10, 1);
-		function fw_ext_articles_show_current_user_attachments($query = array()) {
-			global $current_user;
+}
 
-			$user_id = $current_user->ID;
-			if ($user_id) {
-				$query['author'] = $user_id;
-			}
-			return $query;
+
+/**
+ * Upload Featured Image Using URL and ID.
+ * @return query
+ */
+if (!function_exists('fw_ext_articles_show_current_user_attachments')) {
+	add_filter('ajax_query_attachments_args', 'fw_ext_articles_show_current_user_attachments', 10, 1);
+	function fw_ext_articles_show_current_user_attachments($query = array()) {
+		global $current_user;
+
+		$user_id = $current_user->ID;
+		if ($user_id) {
+			$query['author'] = $user_id;
 		}
+		return $query;
 	}
-	
-	/**
-	 * Upload Featured Image Using URL and ID.
-	 * @param type $image_url
-	 * @param type $post_id
-	 */
-	if (!function_exists('fw_ext_articles_feratured_image')) {
-		function fw_ext_articles_feratured_image($image_url, $post_id) {
-			$upload_dir = wp_upload_dir();
-			$image_data = file_get_contents($image_url);
-			$filename = basename($image_url);
-			if (wp_mkdir_p($upload_dir['path']))
-				$file = $upload_dir['path'] . '/' . $filename;
-			else
-				$file = $upload_dir['basedir'] . '/' . $filename;
-			file_put_contents($file, $image_data);
+}
 
-			$wp_filetype = wp_check_filetype($filename, null);
-			$attachment = array(
-				'post_mime_type' => $wp_filetype['type'],
-				'post_title' => sanitize_file_name($filename),
-				'post_content' => '',
-				'post_status' => 'inherit'
-			);
-			$attach_id = wp_insert_attachment($attachment, $file, $post_id);
-			require_once(ABSPATH . 'wp-admin/includes/image.php');
-			$attach_data = wp_generate_attachment_metadata($attach_id, $file);
-			wp_update_attachment_metadata($attach_id, $attach_data);
-			set_post_thumbnail($post_id, $attach_id);
-		}
+/**
+ * Upload Featured Image Using URL and ID.
+ * @param type $image_url
+ * @param type $post_id
+ */
+if (!function_exists('fw_ext_articles_feratured_image')) {
+	function fw_ext_articles_feratured_image($image_url, $post_id) {
+		$upload_dir = wp_upload_dir();
+		$image_data = file_get_contents($image_url);
+		$filename = basename($image_url);
+		if (wp_mkdir_p($upload_dir['path']))
+			$file = $upload_dir['path'] . '/' . $filename;
+		else
+			$file = $upload_dir['basedir'] . '/' . $filename;
+		file_put_contents($file, $image_data);
+
+		$wp_filetype = wp_check_filetype($filename, null);
+		$attachment = array(
+			'post_mime_type' => $wp_filetype['type'],
+			'post_title' => sanitize_file_name($filename),
+			'post_content' => '',
+			'post_status' => 'inherit'
+		);
+		$attach_id = wp_insert_attachment($attachment, $file, $post_id);
+		require_once(ABSPATH . 'wp-admin/includes/image.php');
+		$attach_data = wp_generate_attachment_metadata($attach_id, $file);
+		wp_update_attachment_metadata($attach_id, $attach_data);
+		set_post_thumbnail($post_id, $attach_id);
 	}
 }
 

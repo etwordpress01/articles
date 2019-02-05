@@ -43,27 +43,18 @@ if (!empty($_GET['sort'])) {
     $sorting = esc_attr($_GET['sort']);
 }
 
-$args = array('posts_per_page' => '-1',
-    'post_type' => 'sp_articles',
-    'orderby' => 'ID',
-    'post_status' => 'publish',
-    'author' => $url_identity,
-    'suppress_filters' => false
-);
-$query = new WP_Query($args);
-$count_post = $query->post_count;
-
 $args = array('posts_per_page' => $show_posts,
     'post_type' => 'sp_articles',
     'orderby' => $sorting,
     'order' => $order,
-    'post_status' => 'publish',
+    'post_status' => array('publish','pending'),
     'author' => $url_identity,
     'paged' => $paged,
     'suppress_filters' => false
 );
 
 $query = new WP_Query($args);
+$count_post = $query->found_posts;
 ?>
 <div id="tg-content" class="tg-content">
     <div class="tg-joblisting tg-dashboardmanagejobs">
@@ -108,6 +99,7 @@ $query = new WP_Query($args);
                     $today = time();
                     while ($query->have_posts()) : $query->the_post();
                         global $post;
+						$status = get_post_status($post->ID);
                         ?>
                         <tr>
                             <td>
@@ -119,7 +111,8 @@ $query = new WP_Query($args);
                                     <div class="tg-title">
                                         <h3><a href="<?php echo esc_url(get_the_permalink()); ?>"><?php the_title(); ?></a></h3>
                                     </div>
-                                    <span><?php esc_html_e('By', 'listingo'); ?>:&nbsp;<?php echo esc_attr($get_username); ?></span> 
+                                    <span><?php esc_html_e('By', 'listingo'); ?>:&nbsp;<?php echo esc_attr($get_username); ?></span>
+                                    <span><?php esc_html_e('Status', 'listingo'); ?>:&nbsp;<?php echo apply_filters('listingo_print_post_status',$status,$post->ID); ?></span> 
                                 </div>
                             </td>
                         </tr>

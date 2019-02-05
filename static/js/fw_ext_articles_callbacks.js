@@ -6,9 +6,7 @@ jQuery(document).on('ready', function () {
 	var listingo_featured_nounce	= fw_ext_articles_scripts_vars.listingo_featured_nounce;
 	var file_upload_title	= fw_ext_articles_scripts_vars.file_upload_title;
 	
-    /***********************************************
-     * Add/Edit new Article
-     **********************************************/
+    //Add/Edit new Article
     jQuery(document).on('click', '.process-article', function (e) {
         e.preventDefault();
         if( typeof tinyMCE === 'object' ) {
@@ -40,9 +38,7 @@ jQuery(document).on('ready', function () {
         return false;
     });
 	
-    /***********************************************
-     * Delete Article
-     **********************************************/
+    //Delete Article
     jQuery(document).on('click', '.btn-article-del', function (event) {
         event.preventDefault();
         var _this = jQuery(this);
@@ -88,6 +84,7 @@ jQuery(document).on('ready', function () {
 		browse_button: 'upload-featured-image',          // this can be an id of a DOM element or the DOM element itself
 		file_data_name: 'listingo_uploader',
 		container: 'plupload-featured-container',
+		drop_element: 'upload-featured-image',
 		multi_selection : false,
 		flash_swf_url : fw_ext_articles_scripts_vars.theme_path_uri+'/images/plupload/Moxie.swf',
 		silverlight_xap_url : fw_ext_articles_scripts_vars.theme_path_uri+'/images/plupload/Moxie.xap',
@@ -154,16 +151,12 @@ jQuery(document).on('ready', function () {
     });
 	
     
-    /************************************************
-     * Sort Articles
-     **********************************************/
+    //Sort Articles
     jQuery(document).on('change', '.sort_by, .order_by', function (event) {
         jQuery(".form-sort-articles").submit();
     });
 
-    /*****************************************
-     * Add Article Tags
-     ***************************************/
+    //Add Article Tags
     jQuery(document).on('click', '.add-article-tags', function (e) {
         e.preventDefault();
         var _this = jQuery(this);
@@ -179,9 +172,7 @@ jQuery(document).on('ready', function () {
         
     });
 
-    /************************************************
-     * Delete Article Tags
-     **********************************************/
+    ///Delete Article Tags
     jQuery(document).on('click', '.delete_article_tags', function (e) {
         e.preventDefault();
         var _this = jQuery(this);
