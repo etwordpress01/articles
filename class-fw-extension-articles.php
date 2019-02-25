@@ -10,7 +10,7 @@ class FW_Extension_Articles extends FW_Extension {
      * @internal
      */
     public function _init() {
-        $this->register_post_type();
+        add_action('init',array(&$this,'register_post_type'));
 		add_filter('manage_sp_articles_posts_columns', array(&$this, 'directory_columns_add'),10,1);
 		add_action('manage_sp_articles_posts_custom_column', array(&$this, 'directory_columns'),10, 1);
     }
@@ -59,7 +59,7 @@ class FW_Extension_Articles extends FW_Extension {
      * @access Private
      * @Register Post Type
      */
-    private function register_post_type() {
+    public function register_post_type() {
 		if( function_exists('listingo_get_theme_settings') ){
 			$article_slug	= listingo_get_theme_settings('article_slug');
 		}
