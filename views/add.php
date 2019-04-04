@@ -10,7 +10,7 @@
 global $current_user;
 $user_identity = $current_user->ID;
 $content = esc_html__('Add your article content here.', 'listingo');
-$settings = array('media_buttons' => false);
+$settings = array('media_buttons' => false,'quicktags' => false);
 
 $article_limit = 0;
 if (function_exists('fw_get_db_settings_option')) {

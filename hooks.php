@@ -199,13 +199,13 @@ if (!function_exists('fw_ext_listingo_process_articles')) {
                 $json['message'] = esc_html__('Article updated successfully.', 'listingo');
             } else {
                 $json['type'] = 'error';
-                $json['message'] = esc_html__('Some error occur, please try again later.', 'listingo');
+                $json['message'] = esc_html__('An error occurred, please try again later', 'listingo');
                 echo json_encode($json);
                 die;
             }
         } else {
             $json['type'] = 'error';
-            $json['message'] = esc_html__('Some error occur, please try again later.', 'listingo');
+            $json['message'] = esc_html__('An error occurred, please try again later', 'listingo');
             echo json_encode($json);
             die;
         }
@@ -245,7 +245,7 @@ if (!function_exists('fw_ext_listingo_delete_articles')) {
             die;
         } else {
             $json['type'] = 'error';
-            $json['message'] = esc_html__('Some error occur, please try again later.', 'listingo');
+            $json['message'] = esc_html__('An error occurred, please try again later', 'listingo');
             echo json_encode($json);
             die;
         }
