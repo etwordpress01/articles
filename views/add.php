@@ -10,7 +10,7 @@
 global $current_user;
 $user_identity = $current_user->ID;
 $content = esc_html__('Add your article content here.', 'listingo');
-$settings = array('media_buttons' => false,'quicktags' => false);
+$settings = array('media_buttons' => false,'quicktags' => true);
 
 $article_limit = 0;
 if (function_exists('fw_get_db_settings_option')) {
@@ -90,11 +90,12 @@ $posted_articles = $query->post_count;
                                     </div>
                                     <div class="tg-box">
                                         <label class="tg-fileuploadlabel" for="tg-featuredimage">
-                                            <a href="javascript:;" id="upload-featured-image" class="tg-fileinput sp-upload-container">
-                                                <i class="lnr lnr-cloud-upload"></i>
-                                                <span><?php esc_html_e('Or Drag Your Files Here To Upload', 'listingo'); ?></span>
-                                            </a> 
-                                            <div id="plupload-featured-container"></div>
+                                            <div id="plupload-featured-container">
+                                            	<a href="javascript:;" id="upload-featured-image" class="tg-fileinput sp-upload-container">
+													<i class="lnr lnr-cloud-upload"></i>
+													<span><?php esc_html_e('Or Drag Your Files Here To Upload', 'listingo'); ?></span>
+												</a> 
+                                            </div>
                                         </label>
                                         <div class="tg-gallery">
                                         	<div class="tg-galleryimg tg-galleryimg-item">

@@ -19,7 +19,7 @@ if (!empty($_GET['identity'])) {
 
 $content = esc_html__('Article detail will be here', 'listingo');
 $placeholder = fw_get_template_customizations_directory_uri() . '/extensions/articles/static/img/thumbnails/placeholder.jpg';
-$settings = array('media_buttons' => false,'quicktags' => false);
+$settings = array('media_buttons' => false,'quicktags' => true);
 $edit_id = !empty($_GET['id']) ? intval($_GET['id']) : '';
 $post_author = get_post_field('post_author', $edit_id);
 $status = get_post_status($edit_id);
@@ -118,11 +118,12 @@ $status = get_post_status($edit_id);
                                                 </div>
                                                 <div class="tg-box">
                                                     <label class="tg-fileuploadlabel" for="tg-featuredimage">
-                                                        <a href="javascript:;" id="upload-featured-image" class="tg-fileinput sp-upload-container">
-                                                            <i class="lnr lnr-cloud-upload"></i>
-                                                            <span><?php esc_html_e('Or Drag Your Files Here To Upload', 'listingo'); ?></span>
-                                                        </a> 
-                                                        <div id="plupload-featured-container"></div>
+                                                        <div id="plupload-featured-container">
+															<a href="javascript:;" id="upload-featured-image" class="tg-fileinput sp-upload-container">
+																<i class="lnr lnr-cloud-upload"></i>
+																<span><?php esc_html_e('Or Drag Your Files Here To Upload', 'listingo'); ?></span>
+															</a> 
+														</div>
                                                     </label>
                                                     <div class="tg-gallery">
                                                         <div class="tg-galleryimg tg-galleryimg-item">
